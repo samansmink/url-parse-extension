@@ -2,22 +2,16 @@
 # description: test url_parser extension
 # group: [url_parser]
 
-# Before we load the extension, this will fail
-statement error
-SELECT url_parser('Sam');
-----
-Catalog Error: Scalar Function with name url_parser does not exist!
-
-# Require statement will ensure this test is run with this extension loaded
 require url_parser
 
 # Confirm the extension works
 query I
-SELECT url_parser('Sam');
+SELECT url_scheme('https://github.com/duckdb/duckdb')
 ----
-UrlParser Sam 🐥
+https
 
+# On parser errors or no finding a scheme, the result is also an empty string
 query I
-SELECT url_parser_openssl_version('Michael');
+SELECT url_scheme('not:\a/valid_url')
 ----
-<REGEX>:UrlParser Michael, my linked OpenSSL version is OpenSSL.*
+(empty)
