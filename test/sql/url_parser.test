@@ -1,0 +1,23 @@
+# name: test/sql/url_parser.test
+# description: test url_parser extension
+# group: [url_parser]
+
+# Before we load the extension, this will fail
+statement error
+SELECT url_parser('Sam');
+----
+Catalog Error: Scalar Function with name url_parser does not exist!
+
+# Require statement will ensure this test is run with this extension loaded
+require url_parser
+
+# Confirm the extension works
+query I
+SELECT url_parser('Sam');
+----
+UrlParser Sam 🐥
+
+query I
+SELECT url_parser_openssl_version('Michael');
+----
+<REGEX>:UrlParser Michael, my linked OpenSSL version is OpenSSL.*
